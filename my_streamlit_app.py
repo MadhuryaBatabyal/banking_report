@@ -7,25 +7,14 @@ from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 from sklearn.feature_selection import VarianceThreshold
 from sklearn.decomposition import PCA
-import os
 import streamlit as st
+import os
+import kagglehub
 
-# Set Kaggle credentials from Streamlit secrets
-os.environ["KAGGLE_USERNAME"] = st.secrets["KAGGLE_USERNAME"]
-os.environ["KAGGLE_KEY"] = st.secrets["KAGGLE_KEY"]
-
-# Download the dataset from Kaggle and unzip in ./data folder
-os.system('kaggle datasets download -d ealaxi/paysim1 -p ./data --unzip')
-
-# Verify the contents of the ./data folder to debug path issues
-if os.path.exists('./data'):
-    print("Files in ./data:", os.listdir('./data'))
-else:
-    print("Data directory does not exist.")
-
-# Now read the CSV file - adjust path if the filename differs
-csv_path = './data/PS_20174392719_1491204439457_log.csv'
-df = pd.read_csv(csv_path)
+# Load dataset
+path = kagglehub.dataset_download("ealaxi/paysim1")
+file_path = os.path.join(path, "PS_20174392719_1491204439457_log.csv")
+df = pd.read_csv(file_path)
 
 # Data cleaning
 paysim_clean = df.copy()
@@ -35,6 +24,7 @@ if paysim_clean.isnull().any().any():
     paysim_clean.dropna(inplace=True)
 
 paysim_clean['type'] = paysim_clean['type'].astype('category')
+
 # Feature selection (non-zero variance features)
 numeric_cols = paysim_clean.select_dtypes(include=np.number)
 selector = VarianceThreshold(threshold=0)
