@@ -7,14 +7,18 @@ from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 from sklearn.feature_selection import VarianceThreshold
 from sklearn.decomposition import PCA
-import streamlit as st
 import os
-import kagglehub
+import streamlit as st
 
-# Load dataset
-path = kagglehub.dataset_download("ealaxi/paysim1")
-file_path = os.path.join(path, "PS_20174392719_1491204439457_log.csv")
-df = pd.read_csv(file_path)
+os.environ["KAGGLE_USERNAME"] = st.secrets["KAGGLE_USERNAME"]
+os.environ["KAGGLE_KEY"] = st.secrets["KAGGLE_KEY"]
+
+# Now you can use kagglehub or kaggle CLI commands as usual
+# Example using kaggle CLI
+os.system('kaggle datasets download -d ealaxi/paysim1 -p ./data --unzip')
+
+import pandas as pd
+df = pd.read_csv('./data/PS_20174392719_1491204439457_log.csv')
 
 # Data cleaning
 paysim_clean = df.copy()
