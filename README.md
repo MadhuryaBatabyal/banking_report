@@ -5,3 +5,18 @@ This repository contains a Streamlit application for analyzing the Paysim financ
 ## Installation
 
 Install dependencies:
+pip install -r requirements.txt
+
+
+## Run
+
+Run the Streamlit app:
+streamlit run app.py
+
+
+## Features
+
+- Transaction type distribution
+- Correlation heatmap of features
+- K-Means clustering on transaction data
+- PCA visualization of clusters
