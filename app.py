@@ -7,15 +7,17 @@ from visualization import plot_transaction_type, plot_correlation_heatmap, plot_
 def main():
     st.title("Financial Transaction Analysis Dashboard")
 
-    # Load and preprocess data
-    df = load_data()
+    st.info("Loading dataset...")
+    df = load_data()  # This will provide progress and errors
+
+    st.info("Preprocessing and feature selection...")
     paysim_clean, paysim_selected = clean_and_select_features(df)
 
-    # Perform clustering
+    st.info("Clustering data...")
     cluster_labels = perform_kmeans(paysim_selected, n_clusters=3)
     paysim_clean['cluster'] = cluster_labels
 
-    # PCA for visualization
+    st.info("Computing PCA for visualization...")
     pca_df = compute_pca(paysim_selected, paysim_clean['cluster'])
 
     col1, col2 = st.columns(2)
