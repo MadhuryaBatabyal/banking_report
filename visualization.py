@@ -93,5 +93,22 @@ def plot_pca_cluster(pca_df):
     plt.ylabel("Principal Component 2")
     plt.show()
 
-# Write similar functions for kprototypes, autoencoder, rbm, famd, etc.
+def plot_kprototypes_heatmap():
+    print("plot_kprototypes_heatmap() not implemented yet")
+
+def plot_kprototypes_bar():
+    print("plot_kprototypes_bar() not implemented yet")
+
+def plot_autoencoder_loss():
+    print("plot_autoencoder_loss() not implemented yet")
+
+def plot_reconstruction_error():
+    print("plot_reconstruction_error() not implemented yet")
+
+def plot_rbm_anomaly_distribution():
+    print("plot_rbm_anomaly_distribution() not implemented yet")
+
+def plot_famd_components():
+    print("plot_famd_components() not implemented yet")
+
 
