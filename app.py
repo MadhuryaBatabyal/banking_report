@@ -17,6 +17,7 @@ from visualization import (
     plot_rbm_anomaly_distribution,
     plot_famd_components
 )
+from feature_generation import prepare_kprototypes_df
 
 
 def main():
@@ -55,4 +56,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
