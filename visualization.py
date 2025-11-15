@@ -1,8 +1,8 @@
+import streamlit as st
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 from scipy.stats import pointbiserialr
-import streamlit as st
 
 def plot_transaction_type(df):
     try:
@@ -117,20 +117,93 @@ def plot_pca_cluster(pca_df):
     except Exception as e:
         st.error(f"Error in plot_pca_cluster: {e}")
 
-def plot_kprototypes_heatmap():
-    st.info("plot_kprototypes_heatmap() not implemented yet")
+def plot_kprototypes_heatmap(clustercharacteristicskpsampled):
+    try:
+        clusternumcharacteristics = clustercharacteristicskpsampled.set_index("cluster").drop(columns=["type", "isFraud"], errors="ignore")
+        fig, ax = plt.subplots(figsize=(10, 6))
+        sns.heatmap(clusternumcharacteristics, annot=True, fmt=".2f", cmap="viridis", cbar=True, ax=ax)
+        ax.set_title("K-Prototypes Cluster Numerical Characteristics (Mean Values)")
+        ax.set_xlabel("Numerical Features")
+        ax.set_ylabel("Cluster")
+        st.pyplot(fig)
+    except Exception as e:
+        st.error(f"Error in plot_kprototypes_heatmap: {e}")
 
-def plot_kprototypes_bar():
-    st.info("plot_kprototypes_bar() not implemented yet")
+def plot_kprototypes_bar(clustercharacteristicskpsampled):
+    try:
+        fig, ax = plt.subplots(figsize=(8, 5))
+        sns.barplot(x="cluster", y="type", data=clustercharacteristicskpsampled, palette="coolwarm", hue="type", legend=False, ax=ax)
+        ax.set_title("K-Prototypes Cluster Categorical Characteristic: Mode of Type")
+        ax.set_xlabel("Cluster")
+        ax.set_ylabel("Most Frequent Transaction Type")
+        st.pyplot(fig)
+    except Exception as e:
+        st.error(f"Error in plot_kprototypes_bar: {e}")
 
-def plot_autoencoder_loss():
-    st.info("plot_autoencoder_loss() not implemented yet")
+def plot_autoencoder_loss(history):
+    try:
+        fig, ax = plt.subplots(figsize=(10, 6))
+        ax.plot(history["loss"], label="Training Loss")
+        ax.plot(history["val_loss"], label="Validation Loss")
+        ax.set_title("Autoencoder Training Loss")
+        ax.set_xlabel("Epoch")
+        ax.set_ylabel("Loss")
+        ax.legend()
+        st.pyplot(fig)
+    except Exception as e:
+        st.error(f"Error in plot_autoencoder_loss: {e}")
 
-def plot_reconstruction_error():
-    st.info("plot_reconstruction_error() not implemented yet")
+def plot_reconstruction_error(paysimsampledforaeeval):
+    try:
+        fig, ax = plt.subplots(figsize=(10, 6))
+        sns.histplot(
+            paysimsampledforaeeval[paysimsampledforaeeval.isFraud == 0]["reconstructionerror"],
+            bins=50, kde=True, label="Normal Transactions", ax=ax)
+        sns.histplot(
+            paysimsampledforaeeval[paysimsampledforaeeval.isFraud == 1]["reconstructionerror"],
+            bins=50, kde=True, label="Fraudulent Transactions", ax=ax)
+        ax.set_title("Reconstruction Error Distribution (Sampled Data)")
+        ax.set_xlabel("Reconstruction Error")
+        ax.set_ylabel("Count")
+        ax.legend()
+        st.pyplot(fig)
+    except Exception as e:
+        st.error(f"Error in plot_reconstruction_error: {e}")
 
-def plot_rbm_anomaly_distribution():
-    st.info("plot_rbm_anomaly_distribution() not implemented yet")
+def plot_rbm_anomaly_distribution(paysimsampledforrbmeval):
+    try:
+        fig, ax = plt.subplots(figsize=(12, 6))
+        sns.histplot(
+            paysimsampledforrbmeval[paysimsampledforrbmeval.isFraud == 0]["rbmanomalyscore"],
+            bins=50, kde=True, label="Normal Transactions", ax=ax)
+        sns.histplot(
+            paysimsampledforrbmeval[paysimsampledforrbmeval.isFraud == 1]["rbmanomalyscore"],
+            bins=50, kde=True, label="Fraudulent Transactions", ax=ax)
+        ax.set_title("RBM Anomaly Score Distribution for Normal vs. Fraudulent Transactions (Sampled Data)")
+        ax.set_xlabel("RBM Anomaly Score (Pseudo-likelihood)")
+        ax.set_ylabel("Count")
+        ax.legend()
+        st.pyplot(fig)
+    except Exception as e:
+        st.error(f"Error in plot_rbm_anomaly_distribution: {e}")
 
-def plot_famd_components():
-    st.info("plot_famd_components() not implemented yet")
+def plot_famd_components(famdsample):
+    try:
+        fig, ax = plt.subplots(figsize=(10, 8))
+        sns.scatterplot(
+            x="FAMD Component 1",
+            y="FAMD Component 2",
+            hue="isFraud",
+            palette="viridis",
+            data=famdsample,
+            alpha=0.6,
+            ax=ax
+        )
+        ax.set_title("FAMD Components with Fraud Labels (Sampled Data)")
+        ax.set_xlabel("FAMD Component 1")
+        ax.set_ylabel("FAMD Component 2")
+        ax.grid(True, linestyle="--", alpha=0.7)
+        st.pyplot(fig)
+    except Exception as e:
+        st.error(f"Error in plot_famd_components: {e}")
+
