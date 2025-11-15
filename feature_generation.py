@@ -77,12 +77,43 @@ def prepare_famd_df(paysim_clean):
     return famdsample
 
 def prepare_autoencoder_history(df):
-    # Minimal stub implementation to avoid NameError
-    # Replace this code with actual autoencoder training code
-    
-    epochs = 10
-    history = {
-        "loss": [0.5 - 0.04*i for i in range(epochs)],
-        "val_loss": [0.6 - 0.045*i for i in range(epochs)]
-    }
-    return history
+    # Select numeric features for autoencoder training
+    numeric_cols = df.select_dtypes(include=np.number).columns.drop(["isFraud"], errors='ignore')
+    data = df[numeric_cols].values
+
+    # Standard scale input data
+    scaler = StandardScaler()
+    data_scaled = scaler.fit_transform(data)
+
+    # Split data for training and validation (80-20 split)
+    n_samples = data_scaled.shape[0]
+    split_idx = int(n_samples * 0.8)
+    X_train, X_val = data_scaled[:split_idx], data_scaled[split_idx:]
+
+    # Autoencoder model architecture
+    input_dim = X_train.shape[1]
+    input_layer = Input(shape=(input_dim,))
+    encoded = Dense(16, activation='relu')(input_layer)
+    encoded = Dense(8, activation='relu')(encoded)
+    encoded = Dense(4, activation='relu')(encoded)
+
+    decoded = Dense(8, activation='relu')(encoded)
+    decoded = Dense(16, activation='relu')(decoded)
+    decoded = Dense(input_dim, activation='linear')(decoded)
+
+    autoencoder = Model(inputs=input_layer, outputs=decoded)
+    autoencoder.compile(optimizer=Adam(learning_rate=1e-3), loss='mse')
+
+    # Train autoencoder
+    history = autoencoder.fit(
+        X_train, X_train,
+        epochs=50,
+        batch_size=64,
+        shuffle=True,
+        validation_data=(X_val, X_val),
+        verbose=0
+    )
+
+    # Return keras history dictionary with loss for plotting
+    return history.history
+
