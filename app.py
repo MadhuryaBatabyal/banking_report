@@ -18,7 +18,7 @@ from visualization import (
     plot_famd_components
 )
 from feature_generation import prepare_kprototypes_df
-
+from feature_generation import prepare_autoencoder_history
 
 def main():
     st.title("Financial Transaction Analysis Dashboard")
@@ -56,5 +56,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
