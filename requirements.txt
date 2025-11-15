@@ -7,3 +7,5 @@ scikit-learn
 streamlit
 kagglehub
 kmodes
+prince
+keras
