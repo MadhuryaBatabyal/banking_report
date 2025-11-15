@@ -4,7 +4,7 @@ from sklearn.feature_selection import VarianceThreshold
 
 def clean_and_select_features(df):
     paysim_clean = df.copy()
-    paysim_clean = paysim_clean.drop(['nameOrig', 'nameDest', 'step', 'isFlaggedFraud'], axis=1)
+    paysim_clean = paysim_clean.drop(['nameOrig', 'nameDest'], axis=1)
     if paysim_clean.isnull().any().any():
         paysim_clean.dropna(inplace=True)
     paysim_clean['type'] = paysim_clean['type'].astype('category')
