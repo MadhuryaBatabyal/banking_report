@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 from scipy.stats import pointbiserialr
+from visualization import plot_transaction_type, plot_correlation_heatmap
 
 def plot_transaction_type(df):
     plt.figure(figsize=(10, 6))
